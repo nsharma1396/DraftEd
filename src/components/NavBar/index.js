@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   Container, Dropdown, Image, Menu, Visibility,
 } from 'semantic-ui-react';
@@ -18,12 +18,10 @@ const fixedMenuStyle = {
 };
 
 export default class NavBar extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       menuFixed: false,
-      sidebarVisible: false,
     };
   }
 
@@ -49,13 +47,13 @@ export default class NavBar extends Component {
         >
           <Container text>
             <Menu.Item>
-              <Image size='mini' src='/logo.svg' />
+              <Image size="mini" src="/logo.svg" />
             </Menu.Item>
             <Menu.Item header>Cilantro</Menu.Item>
-            <Menu.Item as='a'>Blog</Menu.Item>
-            <Menu.Item as='a'>Articles</Menu.Item>
-            <Menu.Menu position='right'>
-              <Dropdown text='Dropdown' pointing className='link item'>
+            <Menu.Item as="a">Blog</Menu.Item>
+            <Menu.Item as="a">Articles</Menu.Item>
+            <Menu.Menu position="right">
+              <Dropdown text="Dropdown" pointing className="link item">
                 <Dropdown.Menu>
                   <Dropdown.Item>List Item</Dropdown.Item>
                   <Dropdown.Item>List Item</Dropdown.Item>
@@ -67,5 +65,4 @@ export default class NavBar extends Component {
       </Visibility>
     );
   }
-
 }

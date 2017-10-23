@@ -5,7 +5,6 @@ import NavBar from '../../components/NavBar';
 import QuestionsSidebar from '../../components/QuestionsSidebar';
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +19,7 @@ class App extends Component {
           isVisible={this.state.isSidebarVisible}
           onSelect={(id) => {
             console.log(id);
-            this.setState({isSidebarVisible: !this.state.isSidebarVisible});
+            this.setState({ isSidebarVisible: !this.state.isSidebarVisible });
           }}
         >
           <NavBar />
@@ -32,7 +31,6 @@ class App extends Component {
       </div>
     );
   }
-
 }
 
 export default App;

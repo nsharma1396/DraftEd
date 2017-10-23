@@ -1,0 +1,26 @@
+{
+  "name": "Cilantro",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "1.0.14"
+  },
+  "dependencies": {
+    "draft-js": "^0.10.3",
+    "draft-js-plugins-editor": "^2.0.0-rc8",
+    "draft-js-static-toolbar-plugin": "^2.0.0-rc8",
+    "install": "^0.10.1",
+    "npm": "^5.5.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

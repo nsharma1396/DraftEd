@@ -5,6 +5,7 @@ import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import 'draft-js/dist/Draft.css';
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import './main.css';
+import { Container } from 'semantic-ui-react';
 
 const staticToolbarPlugin = createToolbarPlugin();
 const { Toolbar } = staticToolbarPlugin;
@@ -24,15 +25,17 @@ export default class MainEditor extends Component {
 
   render() {
     return (
-      <div className="editor" onClick={() => this.focus()}>
-        <Editor
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          plugins={plugins}
-          ref={(element) => { this.editor = element; }}
-        />
+      <Container>
         <Toolbar />
-      </div>
+        <div className="editor" onClick={() => this.focus()}>
+          <Editor
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            plugins={plugins}
+            ref={(element) => { this.editor = element; }}
+          />
+        </div>
+      </Container>
     );
   }
 

@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "draft-js": "^0.10.3",
+    "draft-js-buttons": "^2.0.0-rc8",
     "draft-js-plugins-editor": "^2.0.0-rc8",
     "draft-js-static-toolbar-plugin": "^2.0.0-rc8",
     "install": "^0.10.1",
     "npm": "^5.5.1",
+    "random-material-color": "^1.0.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

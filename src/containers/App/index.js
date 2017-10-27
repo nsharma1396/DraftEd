@@ -9,24 +9,27 @@ class App extends Component {
     super(props);
     this.state = {
       isSidebarVisible: false,
+      idSelected: -1,
     };
   }
 
+
   render() {
     return (
-      <div className="App">
+      <div className="App" >
         <QuestionsSidebar
           isVisible={this.state.isSidebarVisible}
           onSelect={(id) => {
-            console.log(id);
-            this.setState({ isSidebarVisible: !this.state.isSidebarVisible });
+           this.setState({ isSidebarVisible: !this.state.isSidebarVisible, idSelected: id });
           }}
         >
           <NavBar />
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-          <Editor />
+          <Editor
+            idSelected={this.state.idSelected}
+            toggled={(visibility) => {
+               this.setState({ isSidebarVisible: visibility });
+            }}
+          />
         </QuestionsSidebar>
       </div>
     );

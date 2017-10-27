@@ -12,3 +12,32 @@
 .editor :global(.public-DraftEditor-content) {
   min-height: 140px;
 }
+
+.questions {
+  background: #fbfbfb;
+  color: #888;
+  font-size: 18px;
+  border: 0;
+  font-weight: bolder;
+  vertical-align: bottom;
+  height: 34px;
+  cursor: pointer;
+}
+
+.questions:hover,
+.questions:focus {
+  background: #f3f3f3;
+}
+
+.back {
+  color: #999;
+  font-family: 'Hoefler Text', Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}
+
+.pre { 
+ display: 'block';
+ padding: 10px 30px;
+ margin: 0;
+ overflow: 'scroll'; }

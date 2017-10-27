@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import {
   Sidebar, Segment, Menu, Header,
 } from 'semantic-ui-react';
+import Questions from './questions';
 
-export default class QuestionsSidebar extends Component {
+
+class QuestionsSidebar extends Component {
   render() {
     return (
       <Sidebar.Pushable as={Segment}>
@@ -23,15 +25,11 @@ export default class QuestionsSidebar extends Component {
               Questions
             </Header>
           </Menu.Item>
-          <Menu.Item onClick={() => { this.props.onSelect(1); }}>
-            Why is glass radioactive ? Why is glass radioactive ? Why is glass radioactive ?
-          </Menu.Item>
-          <Menu.Item onClick={() => { this.props.onSelect(2); }}>
-            Why is cocaine red ?
-          </Menu.Item>
-          <Menu.Item onClick={() => { this.props.onSelect(3); }}>
-            Why is apple purple ?
-          </Menu.Item>
+          {Questions.map(ques => (
+            <Menu.Item key={ques.id} onClick={() => { this.props.onSelect(ques.id); }}>
+              {ques.text}
+            </Menu.Item>
+            ))}
         </Sidebar>
         <Sidebar.Pusher dimmed={this.props.isVisible} >
           {this.props.children}
@@ -40,3 +38,5 @@ export default class QuestionsSidebar extends Component {
     );
   }
 }
+
+export default QuestionsSidebar;

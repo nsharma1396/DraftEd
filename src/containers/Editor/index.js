@@ -7,7 +7,8 @@ import {
   EditorState,
   convertToRaw,
   CompositeDecorator,
-  Modifier } from 'draft-js';
+  Modifier,
+  RichUtils } from 'draft-js';
 import {
   ItalicButton,
   BoldButton,
@@ -33,18 +34,17 @@ const staticToolbarPlugin = createToolbarPlugin({
 
 const { Toolbar } = staticToolbarPlugin;
 
-
-const decorator = new CompositeDecorator([
-  {
-    strategy: findQuestionsEntity,
-    component: showQuestionsEntity,
-  },
-]);
-
-
 export default class MainEditor extends Component {
   constructor(props) {
     super(props);
+    this.removeEntity = this.removeEntity.bind(this);
+    const decorator = new CompositeDecorator([
+      {
+        strategy: findQuestionsEntity,
+        component: showQuestionsEntity,
+        props: { removeEntity: this.removeEntity },
+      },
+    ]);
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       questionId: -1,
@@ -81,6 +81,12 @@ export default class MainEditor extends Component {
     }
   }
 
+  removeEntity(bool, selection) {
+    if (bool === true) {
+      this.setState({ editorState: RichUtils.toggleLink(this.state.editorState, selection, null) });
+    }
+  }
+
   focus() {
     this.editor.focus();
   }
@@ -90,6 +96,7 @@ export default class MainEditor extends Component {
       id: quesId + 1,
       text: question[quesId].text,
       color: randomMC.getColor(),
+      selection: this.state.editorState.getSelection(),
     };
     const contentState = this.state.editorState.getCurrentContent();
     contentState.createEntity('QnA', type, quesData);

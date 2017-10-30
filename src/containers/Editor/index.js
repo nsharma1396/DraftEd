@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Editor from 'draft-js-plugins-editor';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-import { Container } from 'semantic-ui-react';
+import { Container, Button } from 'semantic-ui-react';
 
 import {
   EditorState,
@@ -37,23 +37,33 @@ const { Toolbar } = staticToolbarPlugin;
 export default class MainEditor extends Component {
   constructor(props) {
     super(props);
-    this.removeEntity = this.removeEntity.bind(this);
-    const decorator = new CompositeDecorator([
-      {
-        strategy: findQuestionsEntity,
-        component: showQuestionsEntity,
-        props: { removeEntity: this.removeEntity },
-      },
-    ]);
     this.state = {
-      editorState: EditorState.createEmpty(decorator),
+      editorState: EditorState.createEmpty(),
       questionId: -1,
+      read: false,
     };
+
     this.plugins = [
       staticToolbarPlugin,
     ];
     this.onChange = editorState => this.setState({ editorState });
     this.createQuestionsEntity = this.createQuestionsEntity.bind(this);
+    this.removeEntity = this.removeEntity.bind(this);
+    this.handleDecorators = this.handleDecorators.bind(this);
+  }
+
+  componentWillMount() {
+    const decorator = new CompositeDecorator([
+      {
+        strategy: findQuestionsEntity,
+        component: showQuestionsEntity,
+        props: {
+          removeEntity: this.removeEntity,
+          readOnly: this.state.read,
+        },
+      },
+    ]);
+    this.setState({ editorState: EditorState.set(this.state.editorState, { decorator }) });
   }
 
   componentDidMount() {
@@ -71,6 +81,7 @@ export default class MainEditor extends Component {
       const ques = this.state.questionId - 1;
       this.createQuestionsEntity(ques, 'MUTABLE');
     }
+    if (this.state.read !== prevState.read && this.state.read === false) { this.focus(); }
   }
 
   onClick() {
@@ -81,10 +92,21 @@ export default class MainEditor extends Component {
     }
   }
 
-  removeEntity(bool, selection) {
-    if (bool === true) {
-      this.setState({ editorState: RichUtils.toggleLink(this.state.editorState, selection, null) });
-    }
+  handleDecorators() {
+    const decorator = new CompositeDecorator([
+      {
+        strategy: findQuestionsEntity,
+        component: showQuestionsEntity,
+        props: {
+          removeEntity: this.removeEntity,
+          readOnly: !this.state.read,
+        },
+      },
+    ]);
+    this.setState({
+      editorState: EditorState.set(this.state.editorState, { decorator }),
+      read: !this.state.read,
+    });
   }
 
   focus() {
@@ -107,13 +129,34 @@ export default class MainEditor extends Component {
     this.onChange(newState);
   }
 
+  removeEntity(bool, selection) {
+    if (bool === true) {
+      this.setState({ editorState: RichUtils.toggleLink(this.state.editorState, selection, null) });
+    }
+  }
+
+
   render() {
     return (
       <Container>
         <Toolbar />
-        <button className="questions" onClick={() => this.onClick()}>
-          Questionnaire
-        </button>
+        <Button
+          onClick={() => this.onClick()}
+          disabled={!!this.state.read}
+          color="vk"
+          content="Questionnaire"
+          icon="help"
+          labelPosition="right"
+          circular
+        />
+        <Button
+          onClick={() => this.handleDecorators()}
+          content={this.state.read ? 'Editor Mode' : 'Reader Mode'}
+          color={this.state.read ? 'teal' : 'green'}
+          icon={this.state.read ? 'compose' : 'eye'}
+          labelPosition="right"
+          circular
+        />
         <div
           className="editor"
           role="presentation"
@@ -124,6 +167,8 @@ export default class MainEditor extends Component {
             onChange={this.onChange}
             plugins={this.plugins}
             ref={(element) => { this.editor = element; }}
+            placeholder="Write a note..."
+            readOnly={this.state.read}
           />
         </div>
         <pre className="pre">

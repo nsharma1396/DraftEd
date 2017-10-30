@@ -6,6 +6,7 @@ const showQuestionsEntity = (props) => {
   return (
     <ShowQuestion
       quesData={quesData}
+      readOnly={props.readOnly}
       deleteQuesEntity={(bool) => {
         if(bool===true) {
           props.removeEntity(true,quesData.selection);

@@ -18,6 +18,7 @@
   color: #888;
   font-size: 18px;
   border: 0;
+  border-left: 0.1px solid lightgrey;
   font-weight: bolder;
   vertical-align: bottom;
   height: 34px;
@@ -28,6 +29,24 @@
 .questions:focus {
   background: #f3f3f3;
 }
+.reader {
+  background: #fbfbfb;
+  color: #888;
+  font-size: 18px;
+  border: 0;
+  border-left: 0.1px solid lightgrey;
+  border-right: 0.1px solid lightgrey;      
+  font-weight: bolder;
+  vertical-align: bottom;
+  height: 34px;
+  cursor: pointer;
+}
+
+.reader:hover,
+.reader:focus {
+  background: #f3f3f3;
+}
+
 
 .back {
   color: #999;

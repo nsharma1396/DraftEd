@@ -126,17 +126,30 @@ export default class MainEditor extends Component {
     const selection = this.state.editorState.getSelection();
     const newContent = Modifier.applyEntity(contentState, selection, key);
     const newState = EditorState.push(this.state.editorState, newContent, 'apply-entity');
-    this.onChange(newState);
+    const collapsed = selection.merge({
+      anchorKey: selection.getFocusKey(),
+      anchorOffset: selection.getEndOffset(),
+      focusOffset: selection.getEndOffset(),
+    });
+    this.setState({ editorState: EditorState.forceSelection(newState, collapsed) });
   }
 
   removeEntity(bool, selection) {
     if (bool === true) {
-      this.setState({ editorState: RichUtils.toggleLink(this.state.editorState, selection, null) });
+      const newState = RichUtils.toggleLink(this.state.editorState, selection, null);
+      const collapsed = selection.merge({
+        anchorKey: selection.getFocusKey(),
+        anchorOffset: selection.getEndOffset(),
+        focusOffset: selection.getEndOffset(),
+      });
+      this.setState({ editorState: EditorState.forceSelection(newState, collapsed) });
     }
   }
 
 
   render() {
+    const block = this.state.editorState.getCurrentContent().getBlocksAsArray();
+    const selection = this.state.editorState.getSelection();
     return (
       <Container>
         <Toolbar />
@@ -157,23 +170,37 @@ export default class MainEditor extends Component {
           labelPosition="right"
           circular
         />
-        <div
-          className="editor"
-          role="presentation"
-          onClick={() => this.focus()}
-        >
-          <Editor
-            editorState={this.state.editorState}
-            onChange={this.onChange}
-            plugins={this.plugins}
-            ref={(element) => { this.editor = element; }}
-            placeholder="Write a note..."
-            readOnly={this.state.read}
-          />
+        <div style={{ display: 'flex' }}>
+          <ol className="lines" role="presentation" style={{ listStylePosition: 'inside' }}>
+            {[...Array(block.length)].map((i, j) => (
+              <li
+                key={block[j].key}
+                style={{
+                    color: block[j].key === selection.getFocusKey() ? 'red' : 'initial',
+                  }}
+              />
+              ))}
+          </ol>
+          <div
+            className="editor"
+            role="presentation"
+            onClick={() => this.focus()}
+            style={{ flex: '1' }}
+          >
+            <Editor
+              editorState={this.state.editorState}
+              onChange={this.onChange}
+              plugins={this.plugins}
+              ref={(element) => { this.editor = element; }}
+              placeholder="Write a note..."
+              readOnly={this.state.read}
+            />
+          </div>
         </div>
         <pre className="pre">
           {JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()), null, 10)}
         </pre>
+
       </Container>
     );
   }

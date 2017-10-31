@@ -16,7 +16,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" >
+      <div className="App">
         <QuestionsSidebar
           isVisible={this.state.isSidebarVisible}
           onSelect={(id) => {

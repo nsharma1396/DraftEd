@@ -24,6 +24,7 @@ class ShowQuestion extends Component {
           position="top center"
           flowing
           inverted
+          hideOnScroll={true}
         >
           {this.props.quesData.text}
           &nbsp;&nbsp;
@@ -46,7 +47,6 @@ class ShowQuestion extends Component {
               {this.props.children}
              </span>
             )}
-            id="a"
             on={'click'}
             wide='very'
             open={this.state.showPopup}
@@ -55,6 +55,7 @@ class ShowQuestion extends Component {
             position="top center"
             flowing
             inverted
+            hideOnScroll={true}
           >
             {this.props.quesData.text}
             &nbsp;&nbsp;

@@ -137,10 +137,12 @@ export default class MainEditor extends Component {
   removeEntity(bool, selection) {
     if (bool === true) {
       const newState = RichUtils.toggleLink(this.state.editorState, selection, null);
+      const currentSelection = this.state.editorState.getSelection();
       const collapsed = selection.merge({
-        anchorKey: selection.getFocusKey(),
-        anchorOffset: selection.getEndOffset(),
-        focusOffset: selection.getEndOffset(),
+        anchorKey: currentSelection.getAnchorKey(),
+        anchorOffset: currentSelection.getAnchorOffset(),
+        focusOffset: currentSelection.getAnchorOffset(),
+        focusKey: currentSelection.getAnchorKey(),
       });
       this.setState({ editorState: EditorState.forceSelection(newState, collapsed) });
     }
@@ -155,7 +157,7 @@ export default class MainEditor extends Component {
         <Toolbar />
         <Button
           onClick={() => this.onClick()}
-          disabled={!!this.state.read}
+          disabled={this.state.read}
           color="vk"
           content="Questionnaire"
           icon="help"

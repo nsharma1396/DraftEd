@@ -10,9 +10,19 @@ class App extends Component {
     this.state = {
       isSidebarVisible: false,
       idSelected: -1,
+      changed: false,
     };
   }
 
+  componentDidUpdate() {
+    if (this.state.changed) {
+      this.onUpdate();
+    }
+  }
+
+  onUpdate() {
+    this.setState({ changed: false });
+  }
 
   render() {
     return (
@@ -20,12 +30,15 @@ class App extends Component {
         <QuestionsSidebar
           isVisible={this.state.isSidebarVisible}
           onSelect={(id) => {
-           this.setState({ isSidebarVisible: !this.state.isSidebarVisible, idSelected: id });
+            this.setState({
+              isSidebarVisible: !this.state.isSidebarVisible, idSelected: id, changed: true,
+            });
           }}
         >
           <NavBar />
           <Editor
             idSelected={this.state.idSelected}
+            changed={this.state.changed}
             toggled={(visibility) => {
                this.setState({ isSidebarVisible: visibility });
             }}

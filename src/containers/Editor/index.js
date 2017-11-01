@@ -39,7 +39,6 @@ export default class MainEditor extends Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      questionId: -1,
       read: false,
     };
 
@@ -71,17 +70,20 @@ export default class MainEditor extends Component {
   }
 
   componentWillReceiveProps(next) {
-    if (next.idSelected !== this.props.idSelected) {
-      this.setState({ questionId: next.idSelected });
+    if (next.idSelected !== -1 && next.changed) {
+      const ques = next.idSelected - 1;
+      this.createQuestionsEntity(ques, 'MUTABLE');
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.questionId !== prevState.questionId) {
-      const ques = this.state.questionId - 1;
-      this.createQuestionsEntity(ques, 'MUTABLE');
+    if (this.state.read !== prevState.read && this.state.read === false) {
+      this.onUpdate();
     }
-    if (this.state.read !== prevState.read && this.state.read === false) { this.focus(); }
+  }
+
+  onUpdate() {
+    this.setState({ editorState: EditorState.moveFocusToEnd(this.state.editorState) });
   }
 
   onClick() {

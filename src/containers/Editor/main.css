@@ -7,7 +7,7 @@
   margin-bottom: 2em;
   box-shadow: inset 0px 1px 8px -3px #ABABAB;
   background: #fefefe;
-  width: 90%;
+  width: 100%;
 }
 
 .lines {
@@ -25,6 +25,7 @@
 
 .editor :global(.public-DraftEditor-content) {
   min-height: 140px;
+  word-wrap: break-all;
 }
 
 .questions {
@@ -71,6 +72,7 @@
 
 .pre { 
  display: 'block';
- padding: 10px 30px;
+ text-align: left;
+ padding: 0px 0px;
  margin: 0;
- overflow: 'scroll'; }
+ overflow: scroll; }

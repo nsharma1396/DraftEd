@@ -8,8 +8,8 @@ const showQuestionsEntity = (props) => {
       quesData={quesData}
       readOnly={props.readOnly}
       deleteQuesEntity={(bool) => {
-        if(bool===true) {
-          props.removeEntity(true,quesData.selection);
+        if(bool) {
+          props.removeEntity(bool);
         }
       }}
       >

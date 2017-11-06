@@ -4,11 +4,14 @@ const findQuestionsEntity = (contentBlock, callback, contentState) => {
     (character) => {
       const entityKey = character.getEntity();
       return (
-        entityKey != null &&
+        entityKey !== null &&
         contentState.getEntity(entityKey).getType() === 'QnA'
       )
     },
-    callback,
+    (start,end)=>{
+      console.log(start+" "+end);
+      callback(start,end)
+    }
   );
 };
 

@@ -9,7 +9,6 @@ const findQuestionsEntity = (contentBlock, callback, contentState) => {
       )
     },
     (start,end)=>{
-      console.log(start+" "+end);
       callback(start,end)
     }
   );

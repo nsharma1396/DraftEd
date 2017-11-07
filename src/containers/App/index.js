@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './main.css';
+import { Dimmer, Segment } from 'semantic-ui-react';
 import Editor from '../Editor';
 import NavBar from '../../components/NavBar';
 import QuestionsSidebar from '../../components/QuestionsSidebar';
@@ -26,25 +26,30 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <QuestionsSidebar
-          isVisible={this.state.isSidebarVisible}
-          onSelect={(id) => {
-            this.setState({
-              isSidebarVisible: !this.state.isSidebarVisible, idSelected: id, changed: true,
-            });
-          }}
+      <Dimmer.Dimmable as={Segment} dimmed={this.state.isSidebarVisible}>
+        <Dimmer
+          page
+          active={this.state.isSidebarVisible}
+          onClickOutside={() => this.setState({ isSidebarVisible: !this.state.isSidebarVisible })}
         >
-          <NavBar />
-          <Editor
-            idSelected={this.state.idSelected}
-            changed={this.state.changed}
-            toggled={(visibility) => {
-               this.setState({ isSidebarVisible: visibility });
+          <QuestionsSidebar
+            isVisible={this.state.isSidebarVisible}
+            onSelect={(id) => {
+              this.setState({
+                isSidebarVisible: !this.state.isSidebarVisible, idSelected: id, changed: true,
+              });
             }}
           />
-        </QuestionsSidebar>
-      </div>
+        </Dimmer>
+        <NavBar />
+        <Editor
+          idSelected={this.state.idSelected}
+          changed={this.state.changed}
+          toggled={(visibility) => {
+               this.setState({ isSidebarVisible: visibility });
+            }}
+        />
+      </Dimmer.Dimmable>
     );
   }
 }

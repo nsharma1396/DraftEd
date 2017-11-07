@@ -200,12 +200,30 @@ export default class MainEditor extends Component {
     const selection = this.state.editorState.getSelection();
     return (
       <Container>
+        <Popup
+          trigger={
+            <Button
+              onClick={() => this.onClick()}
+              color="vk"
+                  // content="Questionnaire"
+              icon="help"
+                  // labelPosition="right"
+              floated="right"
+              circular
+              style={{ cursor: 'pointer', display: this.state.read || selection.isCollapsed() ? 'none' : 'initial' }}
+            />
+            }
+          on={['click', 'hover']}
+          hideOnScroll
+          position="bottom center"
+          content="Assign a question to the selected text"
+        />
         <Button
           onClick={() => this.handleDecorators()}
-          // content={this.state.read ? 'Editor Mode' : 'Reader Mode'}
+            // content={this.state.read ? 'Editor Mode' : 'Reader Mode'}
           color={this.state.read ? 'teal' : 'green'}
           icon={this.state.read ? 'compose' : 'eye'}
-          // labelPosition="right"
+            // labelPosition="right"
           circular
           floated="right"
         />
@@ -224,21 +242,6 @@ export default class MainEditor extends Component {
             readOnly={this.state.read}
             stripPastedStyles
           />
-          <Popup
-            trigger={
-              <Button
-                onClick={() => this.onClick()}
-                color="vk"
-                  // content="Questionnaire"
-                icon="help"
-                  // labelPosition="right"
-                circular
-                style={{ cursor: 'pointer', visibility: this.state.read || selection.isCollapsed() ? 'hidden' : 'visible' }}
-              />
-            }
-            position="bottom center"
-            content="Assign a question to the selected text"
-          />
         </div>
         <pre className="pre">
           {selection.serialize()}<br /><br />
@@ -248,4 +251,3 @@ export default class MainEditor extends Component {
     );
   }
 }
-

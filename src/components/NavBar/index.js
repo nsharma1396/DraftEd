@@ -36,9 +36,9 @@ export default class NavBar extends Component {
   render() {
     return (
       <Visibility
-        onBottomPassed={() => this.stickTopMenu()}
-        onBottomVisible={() => this.unStickTopMenu()}
-        once={false}
+        onTopPassed={() => this.stickTopMenu()}
+        onBottomPassedReverse={() => this.unStickTopMenu()}
+        continuous
       >
         <Menu
           borderless

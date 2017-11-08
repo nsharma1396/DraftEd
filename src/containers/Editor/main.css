@@ -13,7 +13,7 @@
 .lines {
   box-sizing: border-box;
   border: 1px solid #ddd;
-  cursor: text;
+  cursor: pointer;
   margin: 0;
   padding: 16px;
   border-radius: 2px;
@@ -25,7 +25,7 @@
 
 .editor :global(.public-DraftEditor-content) {
   min-height: 140px;
-  word-wrap: break-all;
+  z-index: 150;
 }
 
 .questions {

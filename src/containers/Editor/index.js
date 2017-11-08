@@ -241,6 +241,7 @@ export default class MainEditor extends Component {
             placeholder="Write a note..."
             readOnly={this.state.read}
             stripPastedStyles
+            onUpArrow={() => window.scrollBy(0, -18)}
           />
         </div>
         <pre className="pre">

@@ -24,6 +24,8 @@ import {
 } from 'draft-js-buttons';
 
 import randomMC from 'random-material-color';
+import DraftOffsetKey from 'draft-js/lib/DraftOffsetKey';
+
 import 'draft-js/dist/Draft.css';
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import './main.css';
@@ -57,12 +59,15 @@ export default class MainEditor extends Component {
     this.state = {
       editorState: EditorState.createEmpty(),
       read: false,
+      position: {
+        transform: 'scale(0)',
+        position: 'absolute',
+      },
     };
 
     this.plugins = [
       staticToolbarPlugin,
     ];
-    this.onChange = editorState => this.setState({ editorState });
     this.createQuestionsEntity = this.createQuestionsEntity.bind(this);
     this.removeEntity = this.removeEntity.bind(this);
     this.handleDecorators = this.handleDecorators.bind(this);
@@ -99,6 +104,39 @@ export default class MainEditor extends Component {
     }
   }
 
+  onChange(editorState) {
+    this.setState({ editorState });
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      const currentContent = this.state.editorState.getCurrentContent();
+      const currentBlock = currentContent.getBlockForKey(selection.getFocusKey());
+      // TODO verify that always a key-0-0 exists
+      const offsetKey = DraftOffsetKey.encode(currentBlock.getKey(), 0, 0);
+      setTimeout(() => {
+        const node = document.querySelectorAll(`[data-offset-key="${offsetKey}"]`)[0];
+        const rect = node.getBoundingClientRect();
+        const scrollY = window.scrollY == null ? window.pageYOffset : window.scrollY;
+        const editorRef = this.editor.getEditorRef().refs.editor;
+        this.setState({
+          position: {
+            position: 'absolute',
+            top: ((rect.top + scrollY) - 5),
+            left: editorRef.getBoundingClientRect().left - 80,
+            transform: 'scale(1)',
+            transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
+          },
+        });
+      }, 0);
+    } else {
+      this.setState({
+        position: {
+          transform: 'scale(0)',
+          position: 'absolute',
+        },
+      });
+    }
+  }
+
   onUpdate() {
     this.setState({ editorState: EditorState.moveFocusToEnd(this.state.editorState) });
   }
@@ -107,6 +145,7 @@ export default class MainEditor extends Component {
     this.focus();
     const selection = this.state.editorState.getSelection();
     if (!selection.isCollapsed()) {
+      this.editor.blur();
       this.props.toggled(true);
     }
   }
@@ -196,28 +235,10 @@ export default class MainEditor extends Component {
   }
 
   render() {
-    // const block = this.state.editorState.getCurrentContent().getBlocksAsArray();
     const selection = this.state.editorState.getSelection();
+    // const block = this.state.editorState.getCurrentContent().getBlocksAsArray();
     return (
       <Container>
-        <Popup
-          trigger={
-            <Button
-              onClick={() => this.onClick()}
-              color="vk"
-                  // content="Questionnaire"
-              icon="help"
-                  // labelPosition="right"
-              floated="right"
-              circular
-              style={{ cursor: 'pointer', display: this.state.read || selection.isCollapsed() ? 'none' : 'initial' }}
-            />
-            }
-          on={['click', 'hover']}
-          hideOnScroll
-          position="bottom center"
-          content="Assign a question to the selected text"
-        />
         <Button
           onClick={() => this.handleDecorators()}
             // content={this.state.read ? 'Editor Mode' : 'Reader Mode'}
@@ -228,6 +249,23 @@ export default class MainEditor extends Component {
           floated="right"
         />
         <Toolbar />
+        <Popup
+          trigger={
+            <Button
+              onClick={() => this.onClick()}
+              color="vk"
+                    // content="Questionnaire"
+              icon="help"
+                    // labelPosition="right"
+              circular
+              style={this.state.position}
+            />
+              }
+          on={['click', 'hover']}
+          hideOnScroll
+          position="bottom center"
+          content="Assign a question to the selected text"
+        />
         <div
           className="editor"
           role="presentation"
@@ -235,7 +273,7 @@ export default class MainEditor extends Component {
         >
           <Editor
             editorState={this.state.editorState}
-            onChange={this.onChange}
+            onChange={editorState => this.onChange(editorState)}
             plugins={this.plugins}
             ref={(element) => { this.editor = element; }}
             placeholder="Write a note..."

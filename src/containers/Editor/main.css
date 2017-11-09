@@ -25,7 +25,6 @@
 
 .editor :global(.public-DraftEditor-content) {
   min-height: 140px;
-  z-index: 150;
 }
 
 .questions {

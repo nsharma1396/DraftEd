@@ -42,13 +42,15 @@ class App extends Component {
           />
         </Dimmer>
         <NavBar />
-        <Editor
-          idSelected={this.state.idSelected}
-          changed={this.state.changed}
-          toggled={(visibility) => {
-               this.setState({ isSidebarVisible: visibility });
-            }}
-        />
+        <div style={{ paddingTop: '5.5em' }}>
+          <Editor
+            idSelected={this.state.idSelected}
+            changed={this.state.changed}
+            toggled={(visibility) => {
+                 this.setState({ isSidebarVisible: visibility });
+              }}
+          />
+        </div>
       </Dimmer.Dimmable>
     );
   }

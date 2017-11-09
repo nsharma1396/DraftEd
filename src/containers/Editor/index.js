@@ -132,6 +132,7 @@ export default class MainEditor extends Component {
         position: {
           transform: 'scale(0)',
           position: 'absolute',
+          display: 'none',
         },
       });
     }

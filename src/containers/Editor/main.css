@@ -28,39 +28,17 @@
 }
 
 .questions {
-  background: #fbfbfb;
-  color: #888;
-  font-size: 18px;
-  border: 0;
-  border-left: 0.1px solid lightgrey;
-  font-weight: bolder;
-  vertical-align: bottom;
-  height: 34px;
+  bottom:32px;
+  right:32px;
+  z-index :999;
+  position:fixed;
+  transform:scale(1);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 50%;
   cursor: pointer;
 }
-
-.questions:hover,
-.questions:focus {
-  background: #f3f3f3;
-}
-.reader {
-  background: #fbfbfb;
-  color: #888;
-  font-size: 18px;
-  border: 0;
-  border-left: 0.1px solid lightgrey;
-  border-right: 0.1px solid lightgrey;      
-  font-weight: bolder;
-  vertical-align: bottom;
-  height: 34px;
-  cursor: pointer;
-}
-
-.reader:hover,
-.reader:focus {
-  background: #f3f3f3;
-}
-
 
 .back {
   color: #999;

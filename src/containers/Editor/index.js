@@ -60,7 +60,7 @@ export default class MainEditor extends Component {
       editorState: EditorState.createEmpty(),
       read: false,
       position: {
-        transform: 'scale(0)',
+        display: 'none',
         position: 'absolute',
       },
     };
@@ -99,13 +99,15 @@ export default class MainEditor extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.read !== prevState.read && this.state.read === false) {
+    if (this.state.read !== prevState.read) {
       this.onUpdate();
     }
   }
 
   onChange(editorState) {
     this.setState({ editorState });
+    // console.log(this.editor.getReadOnly())
+    // console.log(isSelectionAtLeafStart(editorState))
     const selection = editorState.getSelection();
     if (!selection.isCollapsed()) {
       const currentContent = this.state.editorState.getCurrentContent();
@@ -115,6 +117,7 @@ export default class MainEditor extends Component {
       setTimeout(() => {
         const node = document.querySelectorAll(`[data-offset-key="${offsetKey}"]`)[0];
         const rect = node.getBoundingClientRect();
+        // const selectionRect=getVisibleSelectionRect(window);
         const scrollY = window.scrollY == null ? window.pageYOffset : window.scrollY;
         const editorRef = this.editor.getEditorRef().refs.editor;
         this.setState({
@@ -130,7 +133,6 @@ export default class MainEditor extends Component {
     } else {
       this.setState({
         position: {
-          transform: 'scale(0)',
           position: 'absolute',
           display: 'none',
         },
@@ -139,14 +141,25 @@ export default class MainEditor extends Component {
   }
 
   onUpdate() {
-    this.setState({ editorState: EditorState.moveFocusToEnd(this.state.editorState) });
+    // Hide QnA button on read-mode activation
+    if (this.editor.getReadOnly()) {
+      this.setState({
+        position: {
+          position: 'absolute',
+          display: 'none',
+        },
+      });
+    } else {
+      this.setState({
+        editorState: EditorState.moveFocusToEnd(this.state.editorState),
+      });
+    }
   }
 
   onClick() {
     this.focus();
     const selection = this.state.editorState.getSelection();
     if (!selection.isCollapsed()) {
-      this.editor.blur();
       this.props.toggled(true);
     }
   }
@@ -189,7 +202,13 @@ export default class MainEditor extends Component {
       anchorOffset: selection.getEndOffset(),
       focusOffset: selection.getEndOffset(),
     });
-    this.setState({ editorState: EditorState.forceSelection(newState, collapsed) });
+    this.setState({
+      position: {
+        position: 'absolute',
+        display: 'none',
+      },
+      editorState: EditorState.forceSelection(newState, collapsed),
+    });
   }
 
   removeEntity(bool) {
@@ -242,10 +261,10 @@ export default class MainEditor extends Component {
       <Container>
         <Button
           onClick={() => this.handleDecorators()}
-            // content={this.state.read ? 'Editor Mode' : 'Reader Mode'}
           color={this.state.read ? 'teal' : 'green'}
           icon={this.state.read ? 'compose' : 'eye'}
-            // labelPosition="right"
+          size="huge"
+          className="questions"
           circular
           floated="right"
         />
@@ -255,9 +274,7 @@ export default class MainEditor extends Component {
             <Button
               onClick={() => this.onClick()}
               color="vk"
-                    // content="Questionnaire"
               icon="help"
-                    // labelPosition="right"
               circular
               style={this.state.position}
             />
@@ -271,6 +288,7 @@ export default class MainEditor extends Component {
           className="editor"
           role="presentation"
           onClick={() => this.focus()}
+          style={{ backgroundColor: this.state.read ? 'lightgrey' : 'transparent' }}
         >
           <Editor
             editorState={this.state.editorState}
@@ -281,6 +299,7 @@ export default class MainEditor extends Component {
             readOnly={this.state.read}
             stripPastedStyles
             onUpArrow={() => window.scrollBy(0, -18)}
+            onDownArrow={() => window.scrollBy(0, 16)}
           />
         </div>
         <pre className="pre">

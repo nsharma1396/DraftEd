@@ -71,7 +71,6 @@ class ShowQuestion extends Component {
 
             <Modal
               open={this.state.showModal}
-              closeOnDimmerClick={false}
               closeIcon
               onClose={()=>this.setState({showModal:false})}
             >

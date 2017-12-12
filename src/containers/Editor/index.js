@@ -244,44 +244,29 @@ export default class MainEditor extends Component {
 
   removeEntity(bool) {
     if (bool) {
+      let currentState = this.state.editorState;
       const currentSelection = this.state.editorState.getSelection();
       const currentContent = this.state.editorState.getCurrentContent();
       const position = currentSelection.getStartOffset();
       const currentBlock = currentContent.getBlockForKey(currentSelection.getStartKey());
       const entity = currentBlock.getEntityAt(position);
-      let startUpdated = false;
-      let newAnchor;
-      let anchorOffset;
-      let newFocus;
-      let focusOffset;
+      let newState;
       currentContent.getBlocksAsArray().forEach((block) => {
         block.findEntityRanges((character) => {
           const entityKey = character.getEntity();
           return entityKey === entity;
         }, (start, end) => {
-          if (!startUpdated) {
-            newAnchor = block.key;
-            anchorOffset = start;
-            startUpdated = true;
-          }
-          newFocus = block.key;
-          focusOffset = end;
+          const newSelection = currentSelection.merge({
+            anchorKey: block.key,
+            anchorOffset: start,
+            focusKey: block.key,
+            focusOffset: end,
+          });
+          newState = RichUtils.toggleLink(currentState, newSelection, null);
+          currentState = newState;
         });
       });
-      const newSelection = currentSelection.merge({
-        anchorKey: newAnchor,
-        anchorOffset,
-        focusOffset,
-        focusKey: newFocus,
-      });
-      const newState = RichUtils.toggleLink(this.state.editorState, newSelection, null);
-      const collapsed = currentSelection.merge({
-        anchorKey: currentSelection.getAnchorKey(),
-        anchorOffset: currentSelection.getAnchorOffset(),
-        focusOffset: currentSelection.getAnchorOffset(),
-        focusKey: currentSelection.getAnchorKey(),
-      });
-      this.setState({ editorState: EditorState.forceSelection(newState, collapsed) });
+      this.setState({ editorState: EditorState.forceSelection(newState, currentSelection) });
     }
   }
 

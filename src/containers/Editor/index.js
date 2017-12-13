@@ -266,7 +266,8 @@ export default class MainEditor extends Component {
           currentState = newState;
         });
       });
-      this.setState({ editorState: EditorState.forceSelection(newState, currentSelection) });
+      const state = EditorState.push(this.state.editorState, newState.getCurrentContent(), 'apply-entity');
+      this.setState({ editorState: EditorState.forceSelection(state, currentSelection) });
     }
   }
 
